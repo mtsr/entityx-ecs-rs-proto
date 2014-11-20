@@ -1,0 +1,339 @@
+[root]
+name = "roguelike"
+version = "0.0.1"
+dependencies = [
+ "ecs 0.9.2 (git+https://github.com/mtsr/ecs-rs.git)",
+ "piston 0.0.0 (git+https://github.com/pistondevelopers/piston)",
+ "tcod 0.2.0",
+]
+
+[[package]]
+name = "ai_behavior"
+version = "0.0.0"
+source = "git+https://github.com/pistondevelopers/ai_behavior#afc8467b6371d8739e4f648acb8dabf6894bea15"
+dependencies = [
+ "event 0.0.0 (git+https://github.com/pistondevelopers/event)",
+]
+
+[[package]]
+name = "cam"
+version = "0.0.0"
+source = "git+https://github.com/pistondevelopers/cam#c7bfceab05c7ffa9abc6ccced4817b29a4d34f18"
+dependencies = [
+ "event 0.0.0 (git+https://github.com/pistondevelopers/event)",
+ "vecmath 0.0.0 (git+https://github.com/pistondevelopers/vecmath)",
+]
+
+[[package]]
+name = "current"
+version = "0.0.0"
+source = "git+https://github.com/PistonDevelopers/current#281637a9f018f41ed44a1525a0f1666a94d7040a"
+
+[[package]]
+name = "device"
+version = "0.1.0"
+source = "git+https://github.com/gfx-rs/gfx-rs#92423cb7c959c648bfb7211aad52d9654d86eed1"
+dependencies = [
+ "gfx_gl 0.1.0 (git+https://github.com/gfx-rs/gfx_gl.git)",
+]
+
+[[package]]
+name = "drag_controller"
+version = "0.0.0"
+source = "git+https://github.com/pistondevelopers/drag_controller#a797ac069d5be635c08c1f3a17f3f572b0d12ffd"
+dependencies = [
+ "event 0.0.0 (git+https://github.com/pistondevelopers/event)",
+]
+
+[[package]]
+name = "ecs"
+version = "0.9.2"
+source = "git+https://github.com/mtsr/ecs-rs.git#729d578c8578ce1c3ab1850b447fca78c55e6e57"
+dependencies = [
+ "uuid 0.0.2 (git+https://github.com/rust-lang/uuid)",
+]
+
+[[package]]
+name = "event"
+version = "0.0.0"
+source = "git+https://github.com/pistondevelopers/event#4d0bd4a9dbdbfb4df7f557213d5face4c4175d5d"
+dependencies = [
+ "current 0.0.0 (git+https://github.com/PistonDevelopers/current)",
+ "event_loop 0.0.0 (git+https://github.com/PistonDevelopers/event_loop)",
+ "input 0.0.0 (git+https://github.com/pistondevelopers/input)",
+ "time 0.0.2 (git+http://github.com/rust-lang/time)",
+ "window 0.0.0 (git+https://github.com/PistonDevelopers/window)",
+]
+
+[[package]]
+name = "event_loop"
+version = "0.0.0"
+source = "git+https://github.com/PistonDevelopers/event_loop#3d79482c112cf27c7b94e4215808e21759761d4f"
+dependencies = [
+ "current 0.0.0 (git+https://github.com/PistonDevelopers/current)",
+ "time 0.0.2 (git+http://github.com/rust-lang/time)",
+]
+
+[[package]]
+name = "fps_counter"
+version = "0.0.0"
+source = "git+https://github.com/pistondevelopers/fps_counter#520212c7e62eb6862939e8acdf72cb477f2b1201"
+dependencies = [
+ "time 0.0.2 (git+http://github.com/rust-lang/time)",
+]
+
+[[package]]
+name = "gcc"
+version = "0.0.1"
+source = "git+https://github.com/alexcrichton/gcc-rs#f25b3ba9c40303781189cc137fb98fffe5b56de7"
+
+[[package]]
+name = "genmesh"
+version = "0.1.0"
+source = "git+https://github.com/csherratt/genmesh.git#b873594b1479f7b85e0bcba47db3cbf7427145e7"
+
+[[package]]
+name = "gfx"
+version = "0.1.0"
+source = "git+https://github.com/gfx-rs/gfx-rs#92423cb7c959c648bfb7211aad52d9654d86eed1"
+dependencies = [
+ "device 0.1.0 (git+https://github.com/gfx-rs/gfx-rs)",
+ "gfx_macros 0.1.0 (git+https://github.com/gfx-rs/gfx-rs)",
+ "render 0.1.0 (git+https://github.com/gfx-rs/gfx-rs)",
+]
+
+[[package]]
+name = "gfx_gl"
+version = "0.1.0"
+source = "git+https://github.com/gfx-rs/gfx_gl.git#ed681503da2e7ed9343003e78af4767e8e4e33a8"
+dependencies = [
+ "gl_generator 0.0.1 (git+https://github.com/bjz/gl-rs)",
+]
+
+[[package]]
+name = "gfx_graphics"
+version = "0.0.0"
+source = "git+https://github.com/pistondevelopers/gfx_graphics#e74f7fe413ecc77450914b472e20d99738dff09b"
+dependencies = [
+ "gfx 0.1.0 (git+https://github.com/gfx-rs/gfx-rs)",
+ "gfx_macros 0.1.0 (git+https://github.com/gfx-rs/gfx-rs)",
+ "gfx_texture 0.0.0 (git+https://github.com/pistondevelopers/gfx_texture)",
+ "graphics 0.0.0 (git+https://github.com/pistondevelopers/graphics)",
+ "image 0.1.0 (git+https://github.com/pistondevelopers/image)",
+]
+
+[[package]]
+name = "gfx_macros"
+version = "0.1.0"
+source = "git+https://github.com/gfx-rs/gfx-rs#92423cb7c959c648bfb7211aad52d9654d86eed1"
+
+[[package]]
+name = "gfx_texture"
+version = "0.0.0"
+source = "git+https://github.com/pistondevelopers/gfx_texture#504a58b3a28ed99bed32121832ca12f182f648ab"
+dependencies = [
+ "gfx 0.1.0 (git+https://github.com/gfx-rs/gfx-rs)",
+ "image 0.1.0 (git+https://github.com/pistondevelopers/image)",
+ "texture 0.0.0 (git+https://github.com/pistondevelopers/texture)",
+]
+
+[[package]]
+name = "gl"
+version = "0.0.1"
+source = "git+https://github.com/bjz/gl-rs#d9e63fcb0cb0a2fd97a815bee612a96b394afbb0"
+dependencies = [
+ "gl_generator 0.0.1 (git+https://github.com/bjz/gl-rs)",
+]
+
+[[package]]
+name = "gl_common"
+version = "0.0.1"
+source = "git+https://github.com/bjz/gl-rs#d9e63fcb0cb0a2fd97a815bee612a96b394afbb0"
+
+[[package]]
+name = "gl_generator"
+version = "0.0.1"
+source = "git+https://github.com/bjz/gl-rs#d9e63fcb0cb0a2fd97a815bee612a96b394afbb0"
+dependencies = [
+ "gl_common 0.0.1 (git+https://github.com/bjz/gl-rs)",
+ "khronos_api 0.0.2 (git+https://github.com/bjz/gl-rs)",
+ "rust-xml 0.1.0 (git+https://github.com/netvl/rust-xml)",
+]
+
+[[package]]
+name = "graphics"
+version = "0.0.0"
+source = "git+https://github.com/pistondevelopers/graphics#ec0f7d35a92f29de58cdb5a9e66d96cd6b0170a8"
+dependencies = [
+ "texture 0.0.0 (git+https://github.com/pistondevelopers/texture)",
+ "vecmath 0.0.0 (git+https://github.com/pistondevelopers/vecmath)",
+]
+
+[[package]]
+name = "image"
+version = "0.1.0"
+source = "git+https://github.com/pistondevelopers/image#935b4d3035a106243472ddc2899d066d6d9f65be"
+
+[[package]]
+name = "input"
+version = "0.0.0"
+source = "git+https://github.com/pistondevelopers/input#fb351501f522c8ee0d88954d5c77936458def122"
+
+[[package]]
+name = "khronos_api"
+version = "0.0.2"
+source = "git+https://github.com/bjz/gl-rs#d9e63fcb0cb0a2fd97a815bee612a96b394afbb0"
+
+[[package]]
+name = "noise-rs"
+version = "0.0.1"
+source = "git+https://github.com/bjz/noise-rs#965bf6052316ef343213394edb8eadedb9c52372"
+
+[[package]]
+name = "opengl_graphics"
+version = "0.0.0"
+source = "git+https://github.com/pistondevelopers/opengl_graphics#944933e3e857ec004a07639ef5bdf6a62b9e3dc7"
+dependencies = [
+ "gl 0.0.1 (git+https://github.com/bjz/gl-rs)",
+ "graphics 0.0.0 (git+https://github.com/pistondevelopers/graphics)",
+ "image 0.1.0 (git+https://github.com/pistondevelopers/image)",
+ "shader_version 0.0.0 (git+https://github.com/pistondevelopers/shader_version)",
+ "texture 0.0.0 (git+https://github.com/pistondevelopers/texture)",
+]
+
+[[package]]
+name = "piston"
+version = "0.0.0"
+source = "git+https://github.com/pistondevelopers/piston#4fe63573630659b47b4444932e8aeb96403ede2c"
+dependencies = [
+ "cam 0.0.0 (git+https://github.com/pistondevelopers/cam)",
+ "drag_controller 0.0.0 (git+https://github.com/pistondevelopers/drag_controller)",
+ "event 0.0.0 (git+https://github.com/pistondevelopers/event)",
+ "fps_counter 0.0.0 (git+https://github.com/pistondevelopers/fps_counter)",
+ "genmesh 0.1.0 (git+https://github.com/csherratt/genmesh.git)",
+ "gfx 0.1.0 (git+https://github.com/gfx-rs/gfx-rs)",
+ "gfx_graphics 0.0.0 (git+https://github.com/pistondevelopers/gfx_graphics)",
+ "graphics 0.0.0 (git+https://github.com/pistondevelopers/graphics)",
+ "image 0.1.0 (git+https://github.com/pistondevelopers/image)",
+ "input 0.0.0 (git+https://github.com/pistondevelopers/input)",
+ "noise-rs 0.0.1 (git+https://github.com/bjz/noise-rs)",
+ "opengl_graphics 0.0.0 (git+https://github.com/pistondevelopers/opengl_graphics)",
+ "read_color 0.0.1 (git+https://github.com/pistondevelopers/read_color)",
+ "sdl2_window 0.0.0 (git+https://github.com/pistondevelopers/sdl2_window)",
+ "select_color 0.0.0 (git+https://github.com/pistondevelopers/select_color)",
+ "shader_version 0.0.0 (git+https://github.com/pistondevelopers/shader_version)",
+ "sprite 0.0.0 (git+https://github.com/pistondevelopers/sprite)",
+ "texture-packer 0.0.0 (git+https://github.com/PistonDevelopers/texture-packer)",
+ "vecmath 0.0.0 (git+https://github.com/pistondevelopers/vecmath)",
+ "wavefront-obj 0.0.0 (git+https://github.com/pistondevelopers/wavefront-obj)",
+]
+
+[[package]]
+name = "read_color"
+version = "0.0.1"
+source = "git+https://github.com/pistondevelopers/read_color#c563f9f02a0879353f1c360be1817fe0dadfa9d3"
+
+[[package]]
+name = "render"
+version = "0.1.0"
+source = "git+https://github.com/gfx-rs/gfx-rs#92423cb7c959c648bfb7211aad52d9654d86eed1"
+dependencies = [
+ "device 0.1.0 (git+https://github.com/gfx-rs/gfx-rs)",
+]
+
+[[package]]
+name = "rust-xml"
+version = "0.1.0"
+source = "git+https://github.com/netvl/rust-xml#8feef8eab34cc1a9431870be3b2eccf0343dae19"
+
+[[package]]
+name = "sdl2"
+version = "0.0.1-alpha.1"
+source = "git+https://github.com/AngryLawyer/rust-sdl2#02c3bdde9d3fbed0368bf6d7b8f888332ba76dce"
+
+[[package]]
+name = "sdl2_window"
+version = "0.0.0"
+source = "git+https://github.com/pistondevelopers/sdl2_window#16a1eb2e6d14b57f510c048a7ef9d21c4deb07a3"
+dependencies = [
+ "gl 0.0.1 (git+https://github.com/bjz/gl-rs)",
+ "input 0.0.0 (git+https://github.com/pistondevelopers/input)",
+ "sdl2 0.0.1-alpha.1 (git+https://github.com/AngryLawyer/rust-sdl2)",
+ "shader_version 0.0.0 (git+https://github.com/pistondevelopers/shader_version)",
+ "window 0.0.0 (git+https://github.com/PistonDevelopers/window)",
+]
+
+[[package]]
+name = "select_color"
+version = "0.0.0"
+source = "git+https://github.com/pistondevelopers/select_color#1febf5dae0e949e451a634942acb0862bde88ad7"
+dependencies = [
+ "image 0.1.0 (git+https://github.com/pistondevelopers/image)",
+]
+
+[[package]]
+name = "shader_version"
+version = "0.0.0"
+source = "git+https://github.com/pistondevelopers/shader_version#32364088516495b11b5ac484df923c9fc2854b85"
+
+[[package]]
+name = "sprite"
+version = "0.0.0"
+source = "git+https://github.com/pistondevelopers/sprite#76fde1b3f223202d9073e2f287ba080a67b8d35b"
+dependencies = [
+ "ai_behavior 0.0.0 (git+https://github.com/pistondevelopers/ai_behavior)",
+ "event 0.0.0 (git+https://github.com/pistondevelopers/event)",
+ "graphics 0.0.0 (git+https://github.com/pistondevelopers/graphics)",
+ "uuid 0.0.2 (git+https://github.com/rust-lang/uuid)",
+]
+
+[[package]]
+name = "tcod"
+version = "0.2.0"
+
+[[package]]
+name = "texture"
+version = "0.0.0"
+source = "git+https://github.com/pistondevelopers/texture#0dd5a5f2029b4a56a02f8e528087b93496c6ac52"
+
+[[package]]
+name = "texture-packer"
+version = "0.0.0"
+source = "git+https://github.com/PistonDevelopers/texture-packer#46cdd4ba1b066f3c2fb19cdc05537cadda90af67"
+dependencies = [
+ "image 0.1.0 (git+https://github.com/pistondevelopers/image)",
+]
+
+[[package]]
+name = "time"
+version = "0.0.2"
+source = "git+http://github.com/rust-lang/time#b58210c93a44d7b83a1a9b68b462f5a7fa1942f3"
+dependencies = [
+ "gcc 0.0.1 (git+https://github.com/alexcrichton/gcc-rs)",
+]
+
+[[package]]
+name = "uuid"
+version = "0.0.2"
+source = "git+https://github.com/rust-lang/uuid#410aa2f519a66431214282c1d74d9f95316fb0ff"
+
+[[package]]
+name = "vecmath"
+version = "0.0.0"
+source = "git+https://github.com/pistondevelopers/vecmath#f6fc01026677be506958dee6f61a40b991fe5bc1"
+
+[[package]]
+name = "wavefront-obj"
+version = "0.0.0"
+source = "git+https://github.com/pistondevelopers/wavefront-obj#3d2d37214e19c6053a35e7fda7606016d1fb66bf"
+
+[[package]]
+name = "window"
+version = "0.0.0"
+source = "git+https://github.com/PistonDevelopers/window#888aeccd551a9bd12cd0324a13b919c1ae34e9ee"
+dependencies = [
+ "current 0.0.0 (git+https://github.com/PistonDevelopers/current)",
+ "event_loop 0.0.0 (git+https://github.com/PistonDevelopers/event_loop)",
+ "input 0.0.0 (git+https://github.com/pistondevelopers/input)",
+]
+

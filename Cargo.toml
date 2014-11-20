@@ -1,0 +1,34 @@
+[package]
+
+name = "roguelike"
+version = "0.0.1"
+authors = ["Jonas Matser <jonas@jonasmatser.nl>"]
+
+build = "sh build.sh"
+
+[dependencies.tcod]
+path = "../../tcod-rs"
+
+# [dependencies.ecs]
+# path = "../ecs"
+
+# [dependencies.rxrust]
+# path = "../rxrust"
+
+# [dependencies.gfx]
+# path = "../../gfx-rs"
+# git = "https://github.com/gfx-rs/gfx-rs.git"
+
+# [dependencies.glutin]
+# path = "../../glutin"
+# git = "https://github.com/tomaka/glutin.git"
+
+# [dependencies.glfw]
+# git = "https://github.com/bjz/glfw-rs.git"
+
+[dependencies.ecs]
+git = "https://github.com/mtsr/ecs-rs.git"
+# path = "../../ecs-rs"
+
+[dependencies.piston]
+git = "https://github.com/pistondevelopers/piston"
