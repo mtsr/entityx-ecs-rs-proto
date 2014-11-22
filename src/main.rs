@@ -1,105 +1,112 @@
-#![feature(phase)]
+extern crate graphics;
+extern crate piston;
+extern crate sdl2_window;
+extern crate opengl_graphics;
+extern crate shader_version;
+extern crate event;
 
-#[phase(plugin, link)]
 extern crate ecs;
-extern crate tcod;
 
-use ecs::world::{ WorldBuilder, Components };
-use ecs::entity::Entity;
-use ecs::system::{ EntitySystem, PassiveEntitySystem };
-use ecs::aspect::Aspect;
+use sdl2_window::Sdl2Window;
+use opengl_graphics::Gl;
+use shader_version::opengl::OpenGL_3_2;
 
-use ecs::system::{ EntityProcess, System, Passive };
-use ecs::world::{ EntityData };
+use std::cell::RefCell;
+use piston::{
+    RenderArgs,
+    UpdateArgs
+};
 
-use tcod_systems::{ RenderPassive, InputPassive };
+use graphics::{
+    Context,
+    AddRectangle,
+    AddColor,
+    Draw,
+    RelativeTransform2d,
+};
 
-mod tcod_systems;
+use event::{
+    Events,
+    Window,
+    RenderEvent,
+    UpdateEvent,
+};
 
-component! {
-    Position {
-        x: f32,
-        y: f32 // Due to macro parsing problems, trailing commas do not work.
-    }
+use ecs::{ Entity, EntityManager, System, SystemManager };
 
-    Velocity {
-        dx: f32,
-        dy: f32
-    }
-    // etc.
+struct App {
+    gl: Gl,       // OpenGL drawing backend.
+    rotation: f64, // Rotation for the square.
+    system_manager: SystemManager,
+    entity_manager: EntityManager,
 }
 
-new_type! {
-    Team(int);
-    Experience(int);
-    // etc.
-}
+impl App {
+    fn new() -> App {
+        let mut system_manager = SystemManager::new();
+        system_manager.register(box TestSystem);
 
-feature! {
-    Renderable;
-    // etc.
-}
+        let mut entity_manager = EntityManager::new();
+        let test_entity = entity_manager.create();
 
-pub struct PrintEntityID;
-
-impl EntityProcess for PrintEntityID
-{
-    fn process<'a, T: Iterator<&'a Entity>>(&self, mut entities: T, entity_data: &mut EntityData)
-    {
-        for entity in entities
-        {
-            println!("Processed Entity: {}", entity.get_id());
+        App {
+            gl: Gl::new(OpenGL_3_2),
+            rotation: 0.0,
+            system_manager: system_manager,
+            entity_manager: entity_manager,
         }
     }
-}
 
-impl System for PrintEntityID {}
+    fn render<W: Window>(&mut self, _: &mut W, args: &RenderArgs) {
+        // Set up a context to draw into.
+        let context = &Context::abs(args.width as f64, args.height as f64);
+        // Clear the screen.
+        context.rgba(0.0,1.0,0.0,1.0).draw(&mut self.gl);
+
+        // Draw a box rotating around the middle of the screen.
+        context
+            .trans((args.width / 2) as f64, (args.height / 2) as f64)
+            .rot_rad(self.rotation)
+            .rect(0.0, 0.0, 50.0, 50.0)
+            .rgba(1.0, 0.0, 0.0,1.0)
+            .trans(-25.0, -25.0)
+            .draw(&mut self.gl);
+    }
+
+    fn update<W: Window>(&mut self, _: &mut W, args: &UpdateArgs) {
+        self.system_manager.update::<TestSystem, &UpdateArgs>(&self.entity_manager, args);
+        // Rotate 2 radians per second.
+        self.rotation += 2.0 * args.dt;
+    }
+}
 
 fn main() {
-    let mut builder = WorldBuilder::new();
-
-    builder.register_component::<Position>();
-    builder.register_component::<Velocity>();
-    builder.register_component::<Team>();
-    builder.register_component::<Renderable>();
-
-    let print_entity_ID = PrintEntityID;
-    let print_entity_ID_system = EntitySystem::new(print_entity_ID, Aspect::nil());
-    builder.register_system(box print_entity_ID_system);
-
-    let render_passive = RenderPassive::new(&builder);
-    let render_passive_system = PassiveEntitySystem::new(render_passive, Aspect::nil());
-    builder.register_passive("render", box render_passive_system);
-
-    let input_passive = InputPassive::new(&builder);
-    builder.register_passive("input", box input_passive);
-
-    let mut world = builder.build();
-
-    let entity = world.build_entity(
-        |c: &mut Components, e: Entity| {
-            c.add(&e, Position { x: 5.0, y: 2.0 });
-            c.add(&e, Velocity { dx: 0.0, dy: 0.0 });
-            c.add(&e, Team(1));
-        }
+    // Create an SDL window.
+    let window = Sdl2Window::new(
+        OpenGL_3_2,
+        piston::WindowSettings::default()
     );
 
-    world.update_passive("render");
-    world.update();
-    world.update_passive("render");
+    // Create a new game and run it.
+    let mut app = App::new();
 
-    world.modify_entity(entity,
-        |c: &mut Components, e: Entity| {
-            c.add(&e, Renderable);
-            c.set(&e, Team(2));
-            c.remove::<Velocity>(&e);
-        }
-    );
+    let window = RefCell::new(window);
+    for e in Events::new(&window) {
+        e.render(|r| app.render(window.borrow_mut().deref_mut(), r));
+        e.update(|u| app.update(window.borrow_mut().deref_mut(), u));
+    }
+}
 
-    world.update_passive("input");
+struct TestSystem;
 
-    world.update();
-    world.update_passive("render");
+impl TestSystem {
+    pub fn new() -> TestSystem {
+        TestSystem
+    }
+}
 
-    world.delete_entity(&entity);
+impl System for TestSystem {
+    fn update<A>(&self, entities: &EntityManager, args: A) {
+        println!("Here");
+    }
 }
