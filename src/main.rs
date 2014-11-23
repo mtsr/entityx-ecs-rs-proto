@@ -7,6 +7,8 @@ extern crate event;
 
 extern crate ecs;
 
+use std::rc::Rc;
+
 use sdl2_window::Sdl2Window;
 use opengl_graphics::Gl;
 use shader_version::opengl::OpenGL_3_2;
@@ -38,7 +40,7 @@ struct App {
     gl: Gl,       // OpenGL drawing backend.
     rotation: f64, // Rotation for the square.
     system_manager: SystemManager,
-    entity_manager: EntityManager,
+    entity_manager: Rc<RefCell<EntityManager>>,
 }
 
 impl App {
@@ -47,7 +49,8 @@ impl App {
         system_manager.register(box TestSystem);
 
         let mut entity_manager = EntityManager::new();
-        let test_entity = entity_manager.create();
+        let test_entity1 = Entity::new(entity_manager.downgrade());
+        let test_entity2 = Entity::new(entity_manager.downgrade());
 
         App {
             gl: Gl::new(OpenGL_3_2),
@@ -74,7 +77,7 @@ impl App {
     }
 
     fn update<W: Window>(&mut self, _: &mut W, args: &UpdateArgs) {
-        self.system_manager.update::<TestSystem, &UpdateArgs>(&self.entity_manager, args);
+        self.system_manager.update::<TestSystem, &UpdateArgs>(self.entity_manager.clone(), args);
         // Rotate 2 radians per second.
         self.rotation += 2.0 * args.dt;
     }
@@ -106,7 +109,6 @@ impl TestSystem {
 }
 
 impl System for TestSystem {
-    fn update<A>(&self, entities: &EntityManager, args: A) {
-        println!("Here");
+    fn update<A>(&self, entities: Rc<RefCell<EntityManager>>, args: A) {
     }
 }
