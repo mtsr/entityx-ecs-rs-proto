@@ -49,8 +49,13 @@ impl App {
         system_manager.register(box TestSystem);
 
         let mut entity_manager = EntityManager::new();
+
+        entity_manager.borrow_mut().register_component::<Renderable>();
+
         let test_entity1 = Entity::new(entity_manager.downgrade());
+        test_entity1.assign(Renderable);
         let test_entity2 = Entity::new(entity_manager.downgrade());
+        test_entity2.assign(Renderable);
 
         App {
             gl: Gl::new(OpenGL_3_2),
@@ -99,6 +104,9 @@ fn main() {
         e.update(|u| app.update(window.borrow_mut().deref_mut(), u));
     }
 }
+
+#[deriving(Clone,Copy,Show)]
+struct Renderable;
 
 struct TestSystem;
 
