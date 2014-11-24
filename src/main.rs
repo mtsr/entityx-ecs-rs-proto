@@ -105,7 +105,7 @@ fn main() {
     }
 }
 
-#[deriving(Clone,Copy,Show)]
+#[deriving(Show)]
 struct Renderable;
 
 struct TestSystem;
