@@ -118,7 +118,7 @@ impl TestSystem {
 
 impl System for TestSystem {
     fn update<A>(&self, entities: Rc<RefCell<EntityManager>>, args: A) {
-        let entities = entities.borrow_mut();
+        let entities = entities.borrow();
         let mut entity_iter = entities.entities_with_component::<Renderable>();
         for entity in entity_iter {
         }
