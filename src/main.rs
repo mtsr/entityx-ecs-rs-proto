@@ -52,9 +52,9 @@ impl App {
 
         entity_manager.borrow_mut().register_component::<Renderable>();
 
-        let test_entity1 = Entity::new(entity_manager.downgrade());
+        let test_entity1 = entity_manager.borrow_mut().create_entity();
         test_entity1.assign(Renderable);
-        let test_entity2 = Entity::new(entity_manager.downgrade());
+        let test_entity2 = entity_manager.borrow_mut().create_entity();
         test_entity2.assign(Renderable);
 
         App {
