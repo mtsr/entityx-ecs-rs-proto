@@ -128,17 +128,17 @@ impl TestSystem {
 
 impl System for TestSystem {
     fn update<A>(&self, entity_manager: Rc<RefCell<EntityManager>>, args: A) {
-        let entity_manager = entity_manager.borrow();
+        let mut entity_manager = entity_manager.borrow();
         for entity in entity_manager.entities() {
-            if entity_manager.has_component::<Renderable>(&entity) {
-                if entity_manager.has_component::<Loud>(&entity) {
-                    println!("{}!!!", entity.id());
-                } else {
-                    println!("{}", entity.id());
-                }
-            }
-            for entity in entity_manager.entities() {
-                println!("here");
+            match entity_manager.get_component::<Renderable>(&entity) {
+                &Some(renderable) => {
+                    if entity_manager.has_component::<Loud>(&entity) {
+                        println!("{}!!!, {}", entity.id(), Renderable);
+                    } else {
+                        println!("{}, {}", entity.id(), Renderable);
+                    }
+                },
+                &None => {}
             }
         }
     }
