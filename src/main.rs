@@ -48,20 +48,27 @@ impl App {
         let mut system_manager = SystemManager::new();
         system_manager.register(box TestSystem);
 
-        let mut entity_manager = EntityManager::new();
+        let mut rc_entity_manager = EntityManager::new();
+        { // Scope for rc_entity_manager borrow
+            let mut entity_manager = rc_entity_manager.borrow_mut();
 
-        entity_manager.borrow_mut().register_component::<Renderable>();
+            entity_manager.register_component::<Renderable>();
+            entity_manager.register_component::<Loud>();
 
-        let test_entity1 = entity_manager.borrow_mut().create_entity();
-        test_entity1.assign(Renderable);
-        let test_entity2 = entity_manager.borrow_mut().create_entity();
-        test_entity2.assign(Renderable);
+            let test_entity1 = entity_manager.create_entity();
+            entity_manager.assign_component(&test_entity1, Renderable);
+            entity_manager.assign_component(&test_entity1, Loud);
+            let test_entity2 = entity_manager.create_entity();
+            entity_manager.assign_component(&test_entity2, Renderable);
+            let test_entity3 = entity_manager.create_entity();
+            entity_manager.assign_component(&test_entity3, Loud);
+        }
 
         App {
             gl: Gl::new(OpenGL_3_2),
             rotation: 0.0,
             system_manager: system_manager,
-            entity_manager: entity_manager,
+            entity_manager: rc_entity_manager,
         }
     }
 
@@ -108,6 +115,9 @@ fn main() {
 #[deriving(Show)]
 struct Renderable;
 
+#[deriving(Show)]
+struct Loud;
+
 struct TestSystem;
 
 impl TestSystem {
@@ -117,11 +127,19 @@ impl TestSystem {
 }
 
 impl System for TestSystem {
-    fn update<A>(&self, entities: Rc<RefCell<EntityManager>>, args: A) {
-        let entities = entities.borrow();
-        let mut entity_iter = entities.entities();
-        for entity in entity_iter {
-            println!("{}", entity.id());
+    fn update<A>(&self, entity_manager: Rc<RefCell<EntityManager>>, args: A) {
+        let entity_manager = entity_manager.borrow();
+        for entity in entity_manager.entities() {
+            if entity_manager.has_component::<Renderable>(&entity) {
+                if entity_manager.has_component::<Loud>(&entity) {
+                    println!("{}!!!", entity.id());
+                } else {
+                    println!("{}", entity.id());
+                }
+            }
+            for entity in entity_manager.entities() {
+                println!("here");
+            }
         }
     }
 }
