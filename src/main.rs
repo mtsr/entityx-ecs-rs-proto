@@ -4,16 +4,18 @@ extern crate sdl2_window;
 extern crate opengl_graphics;
 extern crate shader_version;
 extern crate event;
+extern crate current;
 
 extern crate ecs;
 
 use std::rc::Rc;
+use std::fmt::Show;
+use std::cell::RefCell;
 
 use sdl2_window::Sdl2Window;
 use opengl_graphics::Gl;
 use shader_version::opengl::OpenGL_3_2;
 
-use std::cell::RefCell;
 use piston::{
     RenderArgs,
     UpdateArgs
@@ -32,6 +34,13 @@ use event::{
     Window,
     RenderEvent,
     UpdateEvent,
+    WindowSettings,
+    Ups,
+    MaxFps,
+};
+
+use current::{
+    Set,
 };
 
 use ecs::{ Entity, EntityManager, System, SystemManager };
@@ -99,14 +108,23 @@ fn main() {
     // Create an SDL window.
     let window = Sdl2Window::new(
         OpenGL_3_2,
-        piston::WindowSettings::default()
+        WindowSettings {
+            title: "Example".to_string(),
+            size: [640, 480],
+            fullscreen: false,
+            exit_on_esc: true,
+            samples: 0,
+        },
     );
 
     // Create a new game and run it.
     let mut app = App::new();
 
     let window = RefCell::new(window);
-    for e in Events::new(&window) {
+    for e in Events::new(&window)
+    .set(Ups(120))
+    .set(MaxFps(60))
+    {
         e.render(|r| app.render(window.borrow_mut().deref_mut(), r));
         e.update(|u| app.update(window.borrow_mut().deref_mut(), u));
     }
