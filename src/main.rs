@@ -55,7 +55,7 @@ struct App {
 impl App {
     fn new() -> App {
         let mut system_manager = SystemManager::new();
-        system_manager.register(box TestSystem);
+        system_manager.register(TestSystem);
 
         let mut rc_entity_manager = EntityManager::new();
         { // Scope for rc_entity_manager borrow
