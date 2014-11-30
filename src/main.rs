@@ -16,11 +16,6 @@ use sdl2_window::Sdl2Window;
 use opengl_graphics::Gl;
 use shader_version::opengl::OpenGL_3_2;
 
-use piston::{
-    RenderArgs,
-    UpdateArgs
-};
-
 use graphics::{
     Context,
     AddRectangle,
@@ -37,6 +32,8 @@ use event::{
     WindowSettings,
     Ups,
     MaxFps,
+    RenderArgs,
+    UpdateArgs,
 };
 
 use current::{
@@ -98,7 +95,7 @@ impl App {
     }
 
     fn update<W: Window>(&mut self, _: &mut W, args: &UpdateArgs) {
-        self.system_manager.update::<TestSystem, &UpdateArgs>(self.entity_manager.clone(), args);
+        self.system_manager.update::<UpdateArgs, TestSystem>(self.entity_manager.clone(), args);
         // Rotate 2 radians per second.
         self.rotation += 2.0 * args.dt;
     }
@@ -144,8 +141,9 @@ impl TestSystem {
     }
 }
 
-impl System for TestSystem {
-    fn update<A>(&self, entity_manager: Rc<RefCell<EntityManager>>, args: A) {
+impl System<UpdateArgs> for TestSystem {
+    fn update(&self, entity_manager: Rc<RefCell<EntityManager>>, args: &UpdateArgs) {
+        println!("{}", args);
         let mut entity_manager = entity_manager.borrow();
         for entity in entity_manager.entities() {
             match entity_manager.get_component::<Renderable>(&entity) {
