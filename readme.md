@@ -1,0 +1,1 @@
+Prototype project for EntityX based ECS for Rust
