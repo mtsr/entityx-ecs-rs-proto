@@ -30,14 +30,14 @@ path = "../../tcod-rs"
 # git = "https://github.com/mtsr/ecs-rs.git"
 path = "../ecs"
 
-[dependencies.piston]
-git = "https://github.com/pistondevelopers/piston"
+# [dependencies.piston]
+# git = "https://github.com/pistondevelopers/piston"
 
-[dependencies.sdl2_window]
-git = "https://github.com/PistonDevelopers/sdl2_window.git"
+# [dependencies.sdl2_window]
+# git = "https://github.com/PistonDevelopers/sdl2_window.git"
 
-[dependencies.graphics]
-git = "https://github.com/PistonDevelopers/graphics.git"
+# [dependencies.graphics]
+# git = "https://github.com/PistonDevelopers/graphics.git"
 
-[dependencies.opengl_graphics]
-git = "https://github.com/PistonDevelopers/opengl_graphics.git"
+# [dependencies.opengl_graphics]
+# git = "https://github.com/PistonDevelopers/opengl_graphics.git"
