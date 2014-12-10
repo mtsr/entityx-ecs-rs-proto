@@ -64,8 +64,8 @@ impl System<UpdateArgs> for TestSystem {
         // include components
         for entity in entity_manager.entities() {
             if let (
-                Some(renderable),
-                Some(loud)
+                &Some(renderable),
+                &Some(loud)
             ) = (
                 entity_manager.get_component::<Renderable>(&entity),
                 entity_manager.get_component::<Loud>(&entity)
@@ -77,8 +77,8 @@ impl System<UpdateArgs> for TestSystem {
         // exclude components
         for entity in entity_manager.entities() {
             if let (
-                Some(renderable),
-                None
+                &Some(renderable),
+                &None
             ) = (
                 entity_manager.get_component::<Renderable>(&entity),
                 entity_manager.get_component::<Loud>(&entity)
@@ -89,8 +89,8 @@ impl System<UpdateArgs> for TestSystem {
 
         // nested get
         for entity in entity_manager.entities() {
-            if let Some(renderable) = entity_manager.get_component::<Renderable>(&entity) {
-                if let Some(loud) = entity_manager.get_component::<Loud>(&entity) {
+            if let &Some(renderable) = entity_manager.get_component::<Renderable>(&entity) {
+                if let &Some(loud) = entity_manager.get_component::<Loud>(&entity) {
                     println!("3 {}, {}, {}", entity.id(), renderable, loud);
                 } else {
                     println!("3 {}, {}", entity.id(), renderable);
@@ -101,8 +101,8 @@ impl System<UpdateArgs> for TestSystem {
         // optional component
         for entity in entity_manager.entities() {
             if let (
-                Some(renderable),
-                option_loud
+                &Some(renderable),
+                &option_loud
             ) = (
                 entity_manager.get_component::<Renderable>(&entity),
                 entity_manager.get_component::<Loud>(&entity)
