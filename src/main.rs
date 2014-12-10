@@ -28,6 +28,12 @@ fn main() {
         entity_manager.assign_component(&test_entity2, Renderable);
         let test_entity3 = entity_manager.create_entity();
         entity_manager.assign_component(&test_entity3, Loud);
+
+        entity_manager.destroy_entity(test_entity1);
+
+        let test_entity4 = entity_manager.create_entity();
+        entity_manager.assign_component(&test_entity4, Renderable);
+        // entity_manager.assign_component(&test_entity4, Loud);
     }
 
     system_manager.update::<UpdateArgs, TestSystem>(rc_entity_manager.clone(), &UpdateArgs);
@@ -58,8 +64,8 @@ impl System<UpdateArgs> for TestSystem {
         // include components
         for entity in entity_manager.entities() {
             if let (
-                &Some(renderable),
-                &Some(loud)
+                Some(renderable),
+                Some(loud)
             ) = (
                 entity_manager.get_component::<Renderable>(&entity),
                 entity_manager.get_component::<Loud>(&entity)
@@ -71,8 +77,8 @@ impl System<UpdateArgs> for TestSystem {
         // exclude components
         for entity in entity_manager.entities() {
             if let (
-                &Some(renderable),
-                &None
+                Some(renderable),
+                None
             ) = (
                 entity_manager.get_component::<Renderable>(&entity),
                 entity_manager.get_component::<Loud>(&entity)
@@ -83,8 +89,8 @@ impl System<UpdateArgs> for TestSystem {
 
         // nested get
         for entity in entity_manager.entities() {
-            if let &Some(renderable) = entity_manager.get_component::<Renderable>(&entity) {
-                if let &Some(loud) = entity_manager.get_component::<Loud>(&entity) {
+            if let Some(renderable) = entity_manager.get_component::<Renderable>(&entity) {
+                if let Some(loud) = entity_manager.get_component::<Loud>(&entity) {
                     println!("3 {}, {}, {}", entity.id(), renderable, loud);
                 } else {
                     println!("3 {}, {}", entity.id(), renderable);
@@ -95,7 +101,7 @@ impl System<UpdateArgs> for TestSystem {
         // optional component
         for entity in entity_manager.entities() {
             if let (
-                &Some(renderable),
+                Some(renderable),
                 option_loud
             ) = (
                 entity_manager.get_component::<Renderable>(&entity),
