@@ -1,5 +1,5 @@
-#![feature(macro_rules)]
-extern crate ecs;
+#![feature(phase)]
+#[phase(plugin, link)] extern crate ecs;
 
 use std::rc::Rc;
 use std::cell::RefCell;
@@ -11,6 +11,7 @@ use ecs::{
     EntityManager,
     System,
     SystemManager,
+    TupAppend, // required for components macro
 };
 
 fn main() {
@@ -23,6 +24,7 @@ fn main() {
 
         entity_manager.register_component::<Renderable>();
         entity_manager.register_component::<Loud>();
+        entity_manager.register_component::<Player>();
 
         let test_entity1 = entity_manager.create_entity();
         entity_manager.assign_component(&test_entity1, Renderable);
@@ -48,6 +50,9 @@ struct Renderable;
 #[deriving(Show)]
 struct Loud;
 
+#[deriving(Show)]
+struct Player;
+
 struct TestSystem;
 
 impl TestSystem {
@@ -64,66 +69,7 @@ impl System<UpdateArgs> for TestSystem {
         println!("1 {}", args);
         let entity_manager = entity_manager.borrow();
 
-        // include components
-        for entity in entity_manager.entities() {
-            if let (
-                &Some(renderable),
-                &Some(loud)
-            ) = (
-                entity_manager.get_component::<Renderable>(&entity),
-                entity_manager.get_component::<Loud>(&entity)
-            ) {
-                println!("1 {}, {}, {}", entity.id(), renderable, loud);
-            }
-        }
-
-        // exclude components
-        for entity in entity_manager.entities() {
-            if let (
-                &Some(renderable),
-                &None
-            ) = (
-                entity_manager.get_component::<Renderable>(&entity),
-                entity_manager.get_component::<Loud>(&entity)
-            ) {
-                println!("2 {}, {}", entity.id(), renderable);
-            }
-        }
-
-        // nested get
-        for entity in entity_manager.entities() {
-            if let &Some(renderable) = entity_manager.get_component::<Renderable>(&entity) {
-                if let &Some(loud) = entity_manager.get_component::<Loud>(&entity) {
-                    println!("3 {}, {}, {}", entity.id(), renderable, loud);
-                } else {
-                    println!("3 {}, {}", entity.id(), renderable);
-                }
-            }
-        }
-
-        // optional component
-        for entity in entity_manager.entities() {
-            if let (
-                &Some(renderable),
-                &option_loud
-            ) = (
-                entity_manager.get_component::<Renderable>(&entity),
-                entity_manager.get_component::<Loud>(&entity)
-            ) {
-                println!("4 {}, {}, {}", entity.id(), renderable, option_loud);
-            }
-        }
-
-        let mut entities_with_components = entity_manager.entities().filter_map(|entity| {
-            if let &Some(renderable) = entity_manager.get_component::<Renderable>(&entity) {
-                let option_loud = entity_manager.get_component::<Loud>(&entity);
-                return Some((entity, renderable, option_loud));
-            }
-            
-            None
-        });
-
-        for (entity, renderable, option_loud) in entities_with_components {
+        for (entity, renderable, option_loud) in entities_with_components!(entity_manager: with Renderable option Loud without Player) {
             println!("{}, {}, {}", entity.id(), renderable, option_loud);
         }
     }
