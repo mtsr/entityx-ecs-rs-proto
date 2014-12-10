@@ -1,7 +1,10 @@
+#![feature(macro_rules)]
 extern crate ecs;
 
 use std::rc::Rc;
 use std::cell::RefCell;
+
+use std::iter::{ IteratorExt };
 
 use ecs::{
     // Entity,
@@ -109,6 +112,19 @@ impl System<UpdateArgs> for TestSystem {
             ) {
                 println!("4 {}, {}, {}", entity.id(), renderable, option_loud);
             }
+        }
+
+        let mut entities_with_components = entity_manager.entities().filter_map(|entity| {
+            if let &Some(renderable) = entity_manager.get_component::<Renderable>(&entity) {
+                let option_loud = entity_manager.get_component::<Loud>(&entity);
+                return Some((entity, renderable, option_loud));
+            }
+            
+            None
+        });
+
+        for (entity, renderable, option_loud) in entities_with_components {
+            println!("{}, {}, {}", entity.id(), renderable, option_loud);
         }
     }
 }
