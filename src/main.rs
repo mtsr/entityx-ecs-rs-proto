@@ -3,7 +3,7 @@
 
 use std::rc::Rc;
 use std::cell::RefCell;
-
+use std::fmt::Show;
 use std::iter::{ IteratorExt };
 
 use ecs::{
@@ -64,8 +64,8 @@ impl TestSystem {
 #[deriving(Show)]
 struct UpdateArgs;
 
-impl System<UpdateArgs> for TestSystem {
-    fn update(&self, entity_manager: Rc<RefCell<EntityManager>>, args: &UpdateArgs) {
+impl System for TestSystem {
+    fn update<A>(&self, entity_manager: Rc<RefCell<EntityManager>>, args: &A) where A: Show {
         println!("1 {}", args);
         let entity_manager = entity_manager.borrow();
 
