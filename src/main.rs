@@ -54,13 +54,54 @@ impl System<UpdateArgs> for TestSystem {
     fn update(&self, entity_manager: Rc<RefCell<EntityManager>>, args: &UpdateArgs) {
         println!("1 {}", args);
         let entity_manager = entity_manager.borrow();
+
+        // include components
+        for entity in entity_manager.entities() {
+            if let (
+                &Some(renderable),
+                &Some(loud)
+            ) = (
+                entity_manager.get_component::<Renderable>(&entity),
+                entity_manager.get_component::<Loud>(&entity)
+            ) {
+                println!("1 {}, {}, {}", entity.id(), renderable, loud);
+            }
+        }
+
+        // exclude components
+        for entity in entity_manager.entities() {
+            if let (
+                &Some(renderable),
+                &None
+            ) = (
+                entity_manager.get_component::<Renderable>(&entity),
+                entity_manager.get_component::<Loud>(&entity)
+            ) {
+                println!("2 {}, {}", entity.id(), renderable);
+            }
+        }
+
+        // nested get
         for entity in entity_manager.entities() {
             if let &Some(renderable) = entity_manager.get_component::<Renderable>(&entity) {
                 if let &Some(loud) = entity_manager.get_component::<Loud>(&entity) {
-                    println!("3 {}!!!, {}, {}", entity.id(), renderable, loud);
+                    println!("3 {}, {}, {}", entity.id(), renderable, loud);
                 } else {
-                    println!("2 {}, {}", entity.id(), renderable);
+                    println!("3 {}, {}", entity.id(), renderable);
                 }
+            }
+        }
+
+        // optional component
+        for entity in entity_manager.entities() {
+            if let (
+                &Some(renderable),
+                option_loud
+            ) = (
+                entity_manager.get_component::<Renderable>(&entity),
+                entity_manager.get_component::<Loud>(&entity)
+            ) {
+                println!("4 {}, {}, {}", entity.id(), renderable, option_loud);
             }
         }
     }
