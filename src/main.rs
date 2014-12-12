@@ -66,6 +66,7 @@ struct UpdateArgs;
 
 impl System for TestSystem {
     fn update<A>(&self, entity_manager: Rc<RefCell<EntityManager>>, args: &A) where A: Show {
+    fn update<A>(&mut self, entity_manager: Rc<RefCell<EntityManager>>, args: &A) where A: Show {
         println!("1 {}", args);
         let entity_manager = entity_manager.borrow();
 
