@@ -13,6 +13,7 @@ use ecs::{
     System,
     SystemManager,
     TupAppend, // required for components macro
+    ComponentDatastructure,
 };
 
 fn main() {
@@ -23,9 +24,9 @@ fn main() {
     { // Scope for rc_entity_manager borrow
         let mut entity_manager = rc_entity_manager.borrow_mut();
 
-        entity_manager.register_component::<Renderable>();
-        entity_manager.register_component::<Loud>();
-        entity_manager.register_component::<Player>();
+        entity_manager.register_component::<Renderable>(ComponentDatastructure::VecMap);
+        entity_manager.register_component::<Loud>(ComponentDatastructure::Vec);
+        entity_manager.register_component::<Player>(ComponentDatastructure::HashMap);
 
         let test_entity1 = entity_manager.create_entity();
         entity_manager.assign_component(&test_entity1, Renderable);
@@ -43,7 +44,7 @@ fn main() {
         // entity_manager.assign_component(&test_entity4, Loud);
     }
 
-    for count in range::<uint>(1, 10) {
+    for _ in range::<uint>(1, 10) {
         system_manager.update::<UpdateArgs, TestSystem>(&rc_entity_manager, &UpdateArgs);
     }
 }
@@ -82,13 +83,13 @@ impl System for TestSystem {
 
             control.modify(entity, box |entity_manager: &mut EntityManager, entity: Entity| {
                 entity_manager.assign_component(&entity, Player);
-                if let &Some(ref mut loud) = entity_manager.get_component_mut::<Loud>(&entity) {
+                if let Some(ref mut loud) = entity_manager.get_component_mut::<Loud>(&entity) {
                     loud.0 = 10;
                 };
             });
         }
 
-        for (entity, renderable, option_loud, option_player) in entities_with_components!(entity_manager: with Renderable option Loud option Player) {
+        for (entity, option_player) in entities_with_components!(entity_manager: option Player) {
             if option_player.is_some() {
                 control.destroy(entity)
             };
