@@ -56,43 +56,54 @@ struct Renderable;
 struct Loud(int);
 
 #[deriving(Show)]
-struct Player;
+struct Player(uint);
 
-struct TestSystem;
+struct TestSystem {
+    num_players: uint,
+}
 
 impl TestSystem {
     pub fn new() -> TestSystem {
-        TestSystem
+        TestSystem {
+            num_players: 0
+        }
     }
 }
 
 #[deriving(Show)]
 struct UpdateArgs;
 
-impl System for TestSystem {
-    fn update<A>(&mut self, entity_manager: &Rc<RefCell<EntityManager>>, control: &mut Control, args: &A) where A: Show {
+impl System<TestSystem> for TestSystem {
+    fn update<A>(&mut self, entity_manager: &Rc<RefCell<EntityManager>>, control: &mut Control<TestSystem>, args: &A) where A: Show {
         println!("1 {}", args);
         let entity_manager = entity_manager.borrow();
 
-        control.build(box |entity_manager: &mut EntityManager, entity: Entity| {
+        control.build(box |entity_manager: &mut EntityManager, system: &mut TestSystem, entity: Entity| {
+            entity_manager.assign_component(&entity, Player(system.num_players));
+            system.num_players += 1;
             entity_manager.assign_component(&entity, Renderable);
         });
 
         for (entity, renderable, option_loud, option_player) in entities_with_components!(entity_manager: with Renderable option Loud option Player) {
             println!("{}, {}, {}, {}", entity.id(), renderable, option_loud, option_player);
 
-            control.modify(entity, box |entity_manager: &mut EntityManager, entity: Entity| {
-                entity_manager.assign_component(&entity, Player);
-                if let Some(ref mut loud) = entity_manager.get_component_mut::<Loud>(&entity) {
+            control.modify(entity, box |entity_manager: &mut EntityManager, system: &mut TestSystem, entity: Entity| {
+                    if let Some(ref mut loud) = entity_manager.get_component_mut::<Loud>(&entity) {
                     loud.0 = 10;
                 };
             });
         }
 
-        for (entity, option_player) in entities_with_components!(entity_manager: option Player) {
-            if option_player.is_some() {
-                control.destroy(entity)
-            };
+        for (entity, player) in entities_with_components!(entity_manager: with Player) {
+            if let &Player(1) = player {
+            } else {
+                continue;
+            }
+            println!("Filtered {}, {}", entity.id(), player);
         }
+
+        // for (entity, option_player) in entities_with_components!(entity_manager: with Player) {
+        //     control.destroy(entity)
+        // }
     }
 }
