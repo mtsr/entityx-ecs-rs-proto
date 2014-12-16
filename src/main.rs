@@ -20,10 +20,8 @@ fn main() {
     let mut system_manager = SystemManager::new();
     system_manager.register(TestSystem::new());
 
-    let rc_entity_manager = EntityManager::new();
+    let mut entity_manager = EntityManager::new();
     { // Scope for rc_entity_manager borrow
-        let mut entity_manager = rc_entity_manager.borrow_mut();
-
         entity_manager.register_component::<Renderable>(ComponentDatastructure::VecMap);
         entity_manager.register_component::<Loud>(ComponentDatastructure::Vec);
         entity_manager.register_component::<Player>(ComponentDatastructure::HashMap);
@@ -45,7 +43,7 @@ fn main() {
     }
 
     for _ in range::<uint>(1, 10) {
-        system_manager.update::<UpdateArgs, TestSystem>(&rc_entity_manager, &UpdateArgs);
+        system_manager.update::<UpdateArgs, TestSystem>(&mut entity_manager, &UpdateArgs);
     }
 }
 
@@ -74,9 +72,8 @@ impl TestSystem {
 struct UpdateArgs;
 
 impl System<TestSystem> for TestSystem {
-    fn update<A>(&mut self, entity_manager: &Rc<RefCell<EntityManager>>, control: &mut Control<TestSystem>, args: &A) where A: Show {
+    fn update<A>(&mut self, entity_manager: &EntityManager, control: &mut Control<TestSystem>, args: &A) where A: Show {
         println!("1 {}", args);
-        let entity_manager = entity_manager.borrow();
 
         control.build(box |entity_manager: &mut EntityManager, system: &mut TestSystem, entity: Entity| {
             entity_manager.assign_component(&entity, Player(system.num_players));
