@@ -24,7 +24,7 @@ fn main() {
     let mut entity_manager: EntityManager<World1> = EntityManager::new();
 
     entity_manager.register_component::<Renderable>(ComponentDatastructure::VecMap);
-    entity_manager.register_component::<Loud>(ComponentDatastructure::Vec);
+    entity_manager.register_component::<Loud>(ComponentDatastructure::VecMap);
     entity_manager.register_component::<Player>(ComponentDatastructure::HashMap);
 
     let test_entity1 = entity_manager.create_entity();
