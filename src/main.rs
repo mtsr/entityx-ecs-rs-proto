@@ -1,5 +1,6 @@
 #![feature(phase)]
-#[phase(plugin, link)] extern crate ecs;
+extern crate ecs;
+#[phase(plugin)] extern crate ecs_macros;
 
 use std::fmt::Show;
 use std::iter::{ IteratorExt };
@@ -107,4 +108,9 @@ impl<Id> System<Id, TestSystem> for TestSystem {
         //     control.destroy(entity)
         // }
     }
+}
+
+#[cfg(test)]
+mod test {
+
 }

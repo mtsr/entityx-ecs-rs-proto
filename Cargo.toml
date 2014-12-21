@@ -4,11 +4,6 @@ name = "roguelike"
 version = "0.0.1"
 authors = ["Jonas Matser <jonas@jonasmatser.nl>"]
 
-build = "sh build.sh"
-
-# [dependencies.tcod]
-# path = "../../tcod-rs"
-
 # [dependencies.ecs]
 # path = "../ecs"
 
@@ -27,9 +22,9 @@ build = "sh build.sh"
 # git = "https://github.com/bjz/glfw-rs.git"
 
 [dependencies.ecs]
-git = "https://github.com/mtsr/entityx-ecs-rs"
+# git = "https://github.com/mtsr/entityx-ecs-rs"
 # git = "https://github.com/mtsr/ecs-rs.git"
-# path = "../ecs"
+path = "../ecs/ecs"
 
 # [dependencies.piston]
 # git = "https://github.com/pistondevelopers/piston"
