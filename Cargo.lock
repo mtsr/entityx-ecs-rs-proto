@@ -7,20 +7,14 @@ dependencies = [
 
 [[package]]
 name = "anymap"
-version = "0.9.2"
-source = "git+https://github.com/chris-morgan/anymap.git#905800cc304d4c341b64f87779e9ab86f0be6800"
+version = "0.9.4"
+source = "git+https://github.com/chris-morgan/anymap.git#d41769b77a91e5bb8b34e55fc7fd5fb87bc9c1fa"
 
 [[package]]
 name = "ecs"
 version = "0.0.1"
 source = "git+https://github.com/mtsr/entityx-ecs-rs#bc85b6347532c99652569480d20b061a512be841"
 dependencies = [
- "anymap 0.9.2 (git+https://github.com/chris-morgan/anymap.git)",
- "uuid 0.1.0 (git+https://github.com/rust-lang/uuid)",
+ "anymap 0.9.4 (git+https://github.com/chris-morgan/anymap.git)",
 ]
-
-[[package]]
-name = "uuid"
-version = "0.1.0"
-source = "git+https://github.com/rust-lang/uuid#8a709674fa4a9730768c027f92514ecf77b10733"
 

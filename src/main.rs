@@ -1,6 +1,5 @@
 #![feature(phase)]
-extern crate ecs;
-#[phase(plugin)] extern crate ecs_macros;
+#[phase(plugin,link)] extern crate ecs;
 
 use std::fmt::Show;
 use std::iter::{ IteratorExt };
