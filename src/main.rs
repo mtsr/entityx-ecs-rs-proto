@@ -15,98 +15,57 @@ use ecs::{
     ComponentDatastructure,
 };
 
-struct World1;
-struct World2;
-
 fn main() {
+    use std::rand;
+    
     let mut system_manager: SystemManager<World1> = SystemManager::new();
-    system_manager.register(TestSystem::new());
+    system_manager.register(Sys);
 
     let mut entity_manager: EntityManager<World1> = EntityManager::new();
 
-    entity_manager.register_component::<Renderable>(ComponentDatastructure::VecMap);
-    entity_manager.register_component::<Loud>(ComponentDatastructure::VecMap);
-    entity_manager.register_component::<Player>(ComponentDatastructure::HashMap);
+    entity_manager.register_component::<Cmp1>(ComponentDatastructure::VecMap);
+    entity_manager.register_component::<Cmp2>(ComponentDatastructure::VecMap);
+    entity_manager.register_component::<Cmp3>(ComponentDatastructure::VecMap);
 
-    let test_entity1 = entity_manager.create_entity();
-    entity_manager.assign_component(&test_entity1, Renderable);
-    entity_manager.assign_component(&test_entity1, Loud(1));
-    let test_entity2 = entity_manager.create_entity();
-    entity_manager.assign_component(&test_entity2, Loud(2));
-    entity_manager.assign_component(&test_entity2, Renderable);
-    let test_entity3 = entity_manager.create_entity();
-    entity_manager.assign_component(&test_entity3, Loud(3));
+    for i in range(0u, 100000u) {
+        let entity = entity_manager.create_entity();
+        if rand::random::<f32>() > 0.5f32 {
+            entity_manager.assign_component(&entity, Cmp1);
+        }
+        if rand::random::<f32>() > 0.3f32 {
+            entity_manager.assign_component(&entity, Cmp2);
+        }
+        if rand::random::<f32>() > 0.1f32 {
+            entity_manager.assign_component(&entity, Cmp3);
+        }
+    }
 
-    entity_manager.destroy_entity(test_entity1);
-
-    let test_entity4 = entity_manager.create_entity();
-    entity_manager.assign_component(&test_entity4, Renderable);
-
-    let mut entity_manager2: EntityManager<World2> = EntityManager::new();
-    let test_entity5 = entity_manager2.create_entity();
-
-    entity_manager2.is_valid(&test_entity5);
-
-    for _ in range::<uint>(1, 10) {
-        system_manager.update::<UpdateArgs, TestSystem>(&mut entity_manager, &UpdateArgs);
+    for _ in range::<uint>(1, 10000) {
+        system_manager.update::<uint, Sys>(&mut entity_manager, &0u);
     }
 }
 
-#[deriving(Show)]
-struct Renderable;
+struct World1;
 
 #[deriving(Show)]
-struct Loud(int);
+struct Cmp1;
 
 #[deriving(Show)]
-struct Player(uint);
+struct Cmp2;
 
-struct TestSystem {
-    num_players: uint,
-}
+#[deriving(Show)]
+struct Cmp3;
 
-impl TestSystem {
-    pub fn new() -> TestSystem {
-        TestSystem {
-            num_players: 0
+struct Sys;
+
+impl<Id> System<Id, Sys> for Sys {
+    fn update<A>(&mut self, entity_manager: &EntityManager<Id>, control: &mut Control<Id, Sys>, args: &A) where A: Show {
+
+        let mut counter = 0u;
+
+        for (entity, option_cmp2, option_cmp3) in entities_with_components!(entity_manager: without Cmp1 option Cmp2 with Cmp3) {
+            counter += 1;
         }
-    }
-}
-
-#[deriving(Show)]
-struct UpdateArgs;
-
-impl<Id> System<Id, TestSystem> for TestSystem {
-    fn update<A>(&mut self, entity_manager: &EntityManager<Id>, control: &mut Control<Id, TestSystem>, args: &A) where A: Show {
-        println!("1 {}", args);
-
-        control.build(box |entity_manager: &mut EntityManager<Id>, system: &mut TestSystem, entity: Entity<Id>| {
-            entity_manager.assign_component(&entity, Player(system.num_players));
-            system.num_players += 1;
-            entity_manager.assign_component(&entity, Renderable);
-        });
-
-        for (entity, renderable, option_loud, option_player) in entities_with_components!(entity_manager: with Renderable option Loud option Player) {
-            println!("{}, {}, {}, {}", entity.id(), renderable, option_loud, option_player);
-
-            control.modify(entity, box |entity_manager: &mut EntityManager<Id>, system: &mut TestSystem, entity: Entity<Id>| {
-                    if let Some(ref mut loud) = entity_manager.get_component_mut::<Loud>(&entity) {
-                    loud.0 = 10;
-                };
-            });
-        }
-
-        for (entity, player) in entities_with_components!(entity_manager: with Player) {
-            if let &Player(1) = player {
-            } else {
-                continue;
-            }
-            println!("Filtered {}, {}", entity.id(), player);
-        }
-
-        // for (entity, option_player) in entities_with_components!(entity_manager: with Player) {
-        //     control.destroy(entity)
-        // }
     }
 }
 
