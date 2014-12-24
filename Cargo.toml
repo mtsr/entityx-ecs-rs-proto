@@ -20,7 +20,6 @@ authors = ["Jonas Matser <jonas@jonasmatser.nl>"]
 
 [dependencies.ecs]
 # git = "https://github.com/mtsr/entityx-ecs-rs"
-# git = "https://github.com/mtsr/ecs-rs.git"
 path = "../ecs"
 
 # [dependencies.piston]
