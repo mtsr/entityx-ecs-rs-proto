@@ -2,19 +2,32 @@
 name = "roguelike"
 version = "0.0.1"
 dependencies = [
- "ecs 0.0.1 (git+https://github.com/mtsr/entityx-ecs-rs)",
+ "ecs 0.0.1",
+ "time 0.1.12 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
 name = "anymap"
-version = "0.9.4"
-source = "git+https://github.com/chris-morgan/anymap.git#d41769b77a91e5bb8b34e55fc7fd5fb87bc9c1fa"
+version = "0.9.8"
+source = "git+https://github.com/chris-morgan/anymap.git#d96c4a32aca47f67f08ff857ff66e9d89363d6a6"
 
 [[package]]
 name = "ecs"
 version = "0.0.1"
-source = "git+https://github.com/mtsr/entityx-ecs-rs#bc85b6347532c99652569480d20b061a512be841"
 dependencies = [
- "anymap 0.9.4 (git+https://github.com/chris-morgan/anymap.git)",
+ "anymap 0.9.8 (git+https://github.com/chris-morgan/anymap.git)",
+]
+
+[[package]]
+name = "gcc"
+version = "0.1.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+
+[[package]]
+name = "time"
+version = "0.1.12"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+dependencies = [
+ "gcc 0.1.4 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 

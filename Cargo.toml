@@ -33,3 +33,5 @@ path = "../ecs"
 
 # [dependencies.opengl_graphics]
 # git = "https://github.com/PistonDevelopers/opengl_graphics.git"
+
+[dependencies.time]
