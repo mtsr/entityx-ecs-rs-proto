@@ -4,7 +4,7 @@ extern crate glutin;
 
 extern crate ecs;
 
-use glutin::{ Window, PollEventsIterator };
+use glutin::{ Window, PollEventsIterator, ElementState, VirtualKeyCode };
 
 use ecs::{
     World,
@@ -16,35 +16,48 @@ use ecs::{
     TupAppend, // required for components macro
 };
 
+struct WorldId1;
+
 fn main() {
+    let mut world: World<WorldId1> = World::new();
+
     let window = glutin::Window::new().unwrap();
 
     unsafe { window.make_current() };
 
-    let mut events = Loop::new(&window);
+    let mut main_loop = MainLoop::new(&window);
 
-    loop {
-        match events.next() {
-            Some(Event::Update(dt, events)) => {
+    while let Some(event) = main_loop.next() {
+        match event {
+            Event::Update(dt, mut events) => {
+                if !update(&mut world, dt, events) {
+                    break;
+                }
             },
-            Some(Event::Render(ref window, dt)) => {
+            Event::Render(dt, window) => {
+                render(&world, dt, window);
             },
-            None => {
-                break;
-            }
         }
     }
 }
 
+fn update<WorldId>(world: &mut World<WorldId>, dt: u64, events: PollEventsIterator) -> bool {
+    true
+}
+
+fn render<WorldId>(world: &World<WorldId>, dt: u64, window: &Window) {
+    
+}
+
 enum Event<'a> {
     Update(u64, PollEventsIterator<'a>),
-    Render(&'a Window, u64),
+    Render(u64, &'a Window),
 }
 
 const FIXED_TIMESTEP_NS: u64 = 1_000_000_000 / 60;
 const MAX_LOOPS: u8 = 10;
 
-struct Loop<'a> {
+struct MainLoop<'a> {
     loops: u8,
     accumulated_ns: u64,
     last_ns: u64,
@@ -52,9 +65,9 @@ struct Loop<'a> {
     window: &'a Window,
 }
 
-impl<'a> Loop<'a> {
-    fn new(window: &'a Window) -> Loop<'a> {
-        Loop {
+impl<'a> MainLoop<'a> {
+    fn new(window: &'a Window) -> MainLoop<'a> {
+        MainLoop {
             loops: 0,
             accumulated_ns: 0,
             last_ns: time::precise_time_ns(),
@@ -63,7 +76,7 @@ impl<'a> Loop<'a> {
     }
 }
 
-impl<'a> Iterator for Loop<'a> {
+impl<'a> Iterator for MainLoop<'a> {
     type Item = Event<'a>;
 
     fn next(&mut self) -> Option<Event<'a>> {
@@ -80,7 +93,7 @@ impl<'a> Iterator for Loop<'a> {
 
             self.loops = 0;
 
-            return Some(Event::Render(self.window, delta_ns));
+            return Some(Event::Render(delta_ns, self.window));
         }
 
         // this is after a render
