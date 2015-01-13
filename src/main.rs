@@ -1,3 +1,5 @@
+#![allow(unstable)]
+
 extern crate time;
 
 extern crate glutin;
