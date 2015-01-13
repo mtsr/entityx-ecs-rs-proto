@@ -27,7 +27,11 @@ struct WorldId1;
 fn main() {
     let mut world: World<WorldId1> = World::new();
 
-    let window = glutin::Window::new().unwrap();
+    let window = glutin::WindowBuilder::new()
+        // vsync doesn't work on OSX yet
+        .with_vsync()
+        .build_strict()
+        .unwrap();
 
     unsafe { window.make_current() };
 
