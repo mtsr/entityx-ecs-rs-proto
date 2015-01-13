@@ -18,6 +18,10 @@ use ecs::{
     TupAppend, // required for components macro
 };
 
+use handle_manager::{ HandleManager, Handle };
+
+mod handle_manager;
+
 struct WorldId1;
 
 fn main() {
@@ -37,7 +41,9 @@ fn main() {
                 }
             },
             Event::Render(dt, window) => {
-                render(&world, dt, window);
+                // println!("Render");
+                // TODO interpolation
+                render_system.render(&world, dt, window);
             },
         }
     }
@@ -47,9 +53,27 @@ fn update<WorldId>(world: &mut World<WorldId>, dt: u64, events: PollEventsIterat
     true
 }
 
-fn render<WorldId>(world: &World<WorldId>, dt: u64, window: &Window) {
-    
+struct RenderSystem<WorldId> {
+    sprite_manager: HandleManager<WorldId, Sprite>,
 }
+
+impl<WorldId> RenderSystem<WorldId> {
+    fn new() -> RenderSystem<WorldId> {
+        RenderSystem {
+            sprite_manager: HandleManager::new(),
+        }
+    }
+
+    fn create_sprite(&mut self, sprite: Sprite) -> Handle<WorldId, Sprite> {
+        self.sprite_manager.create(sprite)
+    }
+
+    fn render(&mut self, world: &World<WorldId>, dt: u64, window: &Window) {
+        
+    }
+}
+
+struct Sprite;
 
 enum Event<'a> {
     Update(u64, PollEventsIterator<'a>),
