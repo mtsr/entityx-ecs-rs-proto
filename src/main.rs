@@ -3,8 +3,13 @@
 extern crate time;
 
 extern crate glutin;
+extern crate nalgebra;
 
 extern crate ecs;
+
+use std::collections::{ VecMap, HashMap };
+
+use nalgebra::{ Vec2 };
 
 use glutin::{ Window, PollEventsIterator, ElementState, VirtualKeyCode };
 
@@ -24,8 +29,27 @@ mod handle_manager;
 
 struct WorldId1;
 
+struct Position(Vec2<f64>);
+struct Velocity(Vec2<f64>);
+struct Camera;
+
 fn main() {
     let mut world: World<WorldId1> = World::new();
+
+    world.register_component::<Position>(Box::new(VecMap::new()));
+    world.register_component::<Velocity>(Box::new(VecMap::new()));
+    world.register_component::<Handle<WorldId1, Sprite>>(Box::new(VecMap::new()));
+    world.register_component::<Camera>(Box::new(HashMap::new()));
+
+    let ball = world.create_entity();
+    world.assign_component(&ball, Position(Vec2::new(100f64, 100f64)));
+    world.assign_component(&ball, Velocity(Vec2::new(10f64, 10f64)));
+
+    let camera = world.create_entity();
+    world.assign_component(&camera, Position(Vec2::new(100f64, 100f64)));
+    world.assign_component(&camera, Camera);
+
+    let mut render_system = RenderSystem::<WorldId1>::new();
 
     let window = glutin::WindowBuilder::new()
         // vsync doesn't work on OSX yet
@@ -40,6 +64,7 @@ fn main() {
     while let Some(event) = main_loop.next() {
         match event {
             Event::Update(dt, mut events) => {
+                // println!("Update");
                 if !update(&mut world, dt, events) {
                     break;
                 }
@@ -53,6 +78,7 @@ fn main() {
     }
 }
 
+#[allow(unused_variables)]
 fn update<WorldId>(world: &mut World<WorldId>, dt: u64, events: PollEventsIterator) -> bool {
     true
 }
