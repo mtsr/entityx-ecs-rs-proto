@@ -39,3 +39,6 @@ path = "../ecs"
 [dependencies.glutin]
 git = "https://github.com/tomaka/glutin.git"
 # path = "../../glutin"
+
+[dependencies.nalgebra]
+git = "https://github.com/sebcrozet/nalgebra.git"
