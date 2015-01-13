@@ -109,6 +109,8 @@ impl<'a> MainLoop<'a> {
 impl<'a> Iterator for MainLoop<'a> {
     type Item = Event<'a>;
 
+    // TODO consider pushing fixed timesteps into systems
+    // that need it, such as physics
     fn next(&mut self) -> Option<Event<'a>> {
         if self.window.is_closed() {
             return None;
@@ -131,6 +133,7 @@ impl<'a> Iterator for MainLoop<'a> {
             self.window.swap_buffers();
         }
 
+        // TODO "proper" input handling based on timestamps
         let events = self.window.poll_events();
 
         self.accumulated_ns -= FIXED_TIMESTEP_NS;
